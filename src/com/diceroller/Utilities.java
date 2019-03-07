@@ -9,16 +9,27 @@ class Utilities {
         System.out.println(message);
     }
 
-    static String getScannerInput() {
-       return scanner.nextLine();
+    private static String getScannerInput() {
+        return scanner.nextLine();
     }
 
-    static int getValidPositiveInteger(String message, String instruction) {
+    static int getValidPositiveInteger(String instruction) {
+        String message = getScannerInput();
         while (!message.matches("\\d+")) {
             print("Invalid Response");
             print(instruction);
             message = getScannerInput();
         }
         return Integer.parseInt(message);
+    }
+
+    static boolean isDiceCustom(String isCustomDice) {
+        String message = getScannerInput();
+        while (!message.matches("^(?i)[CS]")) {
+            print("Invalid Response");
+            print(isCustomDice);
+            message = getScannerInput();
+        }
+        return message.equals("C");
     }
 }
