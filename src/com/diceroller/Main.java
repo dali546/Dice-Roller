@@ -14,7 +14,16 @@ class Main {
         printWelcomeMessage();
         int numberOfDiceSides = askUserGetIntegerResponse(HOW_MANY_SIDES);
         int numberOfDice = askUserGetIntegerResponse(HOW_MANY_DICE);
-        printMultipleDiceValues(numberOfDice,numberOfDiceSides);
+        int sumOfDice = calculateSumOfDice(numberOfDice, numberOfDiceSides);
+        print("The Sum of all your dice is " + sumOfDice);
+    }
+
+    private static int calculateSumOfDice(int numberOfDice, int numberOfDiceSides) {
+        int sum = 0;
+        for (int i = 0; i < numberOfDice; i++) {
+            sum += getRandomDiceValue(numberOfDiceSides);
+        }
+        return sum;
     }
 
     private static void printWelcomeMessage() {
@@ -26,13 +35,6 @@ class Main {
     private static int askUserGetIntegerResponse(String instruction) {
         print(instruction);
         return getValidPositiveInteger(getScannerInput(), instruction);
-    }
-
-    private static void printMultipleDiceValues(int numberOfDice, int numberOfDiceSides) {
-        int i = 0;
-        while (i < numberOfDice) {
-            print(String.format("Dice %d has a value of %d", ++i, getRandomDiceValue(numberOfDiceSides)));
-        }
     }
 
     private static int getRandomDiceValue(int numberOfDiceSides) {
