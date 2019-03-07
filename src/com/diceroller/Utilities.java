@@ -13,7 +13,7 @@ class Utilities {
         return scanner.nextLine();
     }
 
-    static int getValidPositiveInteger(String instruction) {
+    private static int getValidPositiveInteger(String instruction) {
         String message = getScannerInput();
         while (!message.matches("\\d+")) {
             print("Invalid Response");
@@ -32,4 +32,10 @@ class Utilities {
         }
         return message.equals("C");
     }
+
+    static int askUserGetIntegerResponse(String instruction) {
+        print(instruction);
+        return getValidPositiveInteger(instruction);
+    }
+
 }

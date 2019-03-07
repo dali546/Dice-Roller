@@ -2,26 +2,23 @@ package com.diceroller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static com.diceroller.Utilities.*;
 
 class Main {
 
+    private static final String GET_FACE_VALUE = "What is the value of this face?";
     private static final String IS_CUSTOM_DICE = "Is your dice a Standard or Custom Dice (S/C)?";
     private static final String HOW_MANY_SIDES = "How Many Sides does the Dice Have?";
-    private static final String HOW_MANY_DICE = "How many dice do you wish to roll?";
-    private static final String GET_FACE_VALUE = "What is the value of this face?";
-    private static Random RANDOM = new Random();
+    private static final String HOW_MANY_ROLLS = "How many dice do you wish to roll?";
 
     public static void main(String[] args) {
         printWelcomeMessage();
+        Dice dice = isDiceCustom(IS_CUSTOM_DICE) ? getCustomDice() : getStandardDice();
 
-        if (isDiceCustom(IS_CUSTOM_DICE)) {
-            printCustomDice(getCustomFacesFromUser());
-        } else {
-            printDice();
-        }
+        int rollCount = askUserGetIntegerResponse(HOW_MANY_ROLLS);
+        int sum = calculateSumOfRolls(dice, rollCount);
+        printSum(sum);
     }
 
     private static void printWelcomeMessage() {
@@ -31,45 +28,34 @@ class Main {
         print(IS_CUSTOM_DICE);
     }
 
-    private static void printDice() {
+    private static Dice getStandardDice() {
         int numberOfDiceSides = askUserGetIntegerResponse(HOW_MANY_SIDES);
+        return new StandardDice(numberOfDiceSides);
+    }
+
+    private static Dice getCustomDice() {
+        int numberOfDiceSides = askUserGetIntegerResponse(HOW_MANY_SIDES);
+
         List<Integer> customFaces = new ArrayList<>();
-        for (int i = 1; i <= numberOfDiceSides; i++) {
-            customFaces.add(i);
+        for (int i = 0; i < numberOfDiceSides; i++) {
+            customFaces.add(askUserGetIntegerResponse(GET_FACE_VALUE));
         }
-        printCustomDice(customFaces);
+
+        return new CustomDice(customFaces);
     }
 
-    private static void printCustomDice(List<Integer> faces) {
-        int numberOfDice = askUserGetIntegerResponse(HOW_MANY_DICE);
-        int sumOfDice = calculateSumOfDice(numberOfDice, faces);
-        print("The Sum of all your dice is " + sumOfDice);
-    }
-
-    private static int calculateSumOfDice(int numberOfDice, List<Integer> customFaces) {
+    private static int calculateSumOfRolls(Dice dice, int rollCount) {
         int sum = 0;
-        for (int i = 0; i < numberOfDice; i++) {
-            sum += getRollValue(customFaces);
+
+        for (int i = 0; i < rollCount; i++) {
+            sum += dice.roll();
         }
         return sum;
     }
 
-    private static int getRollValue(List<Integer> customFaces) {
-        return customFaces.get(RANDOM.nextInt(customFaces.size()));
+    private static void printSum(int sum) {
+        print("The Sum of all your dice is " + sum);
     }
 
-    private static List<Integer> getCustomFacesFromUser() {
-        int numberofDiceSides = askUserGetIntegerResponse(HOW_MANY_SIDES);
-        List<Integer> customFaces = new ArrayList<>();
-        for (int i = 0; i < numberofDiceSides; i++) {
-            customFaces.add(askUserGetIntegerResponse(GET_FACE_VALUE));
-        }
-        return customFaces;
-    }
-
-    private static int askUserGetIntegerResponse(String instruction) {
-        print(instruction);
-        return getValidPositiveInteger(instruction);
-    }
 
 }
