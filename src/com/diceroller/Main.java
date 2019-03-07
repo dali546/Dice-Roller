@@ -6,32 +6,37 @@ import static com.diceroller.Utilities.*;
 
 class Main {
 
+    private static final String HOW_MANY_SIDES = "How Many Sides does the Dice Have?";
     private static final String HOW_MANY_DICE = "How many dice do you wish to roll?";
     private static Random RANDOM = new Random();
 
     public static void main(String[] args) {
-        initialiseScanner();
         printWelcomeMessage();
-        int numberOfDice = getValidPositiveInteger(getScannerInput(), "Invalid Response", HOW_MANY_DICE);
-        printMultipleDiceValues(numberOfDice);
+        int numberOfDiceSides = askUserGetIntegerResponse(HOW_MANY_SIDES);
+        int numberOfDice = askUserGetIntegerResponse(HOW_MANY_DICE);
+        printMultipleDiceValues(numberOfDice,numberOfDiceSides);
     }
 
     private static void printWelcomeMessage() {
         print("Welcome To Dice Roller");
         print("######################");
         print("");
-        print(HOW_MANY_DICE);
     }
 
-    private static void printMultipleDiceValues(int numberOfDice) {
+    private static int askUserGetIntegerResponse(String instruction) {
+        print(instruction);
+        return getValidPositiveInteger(getScannerInput(), instruction);
+    }
+
+    private static void printMultipleDiceValues(int numberOfDice, int numberOfDiceSides) {
         int i = 0;
         while (i < numberOfDice) {
-            print(String.format("Dice %d has a value of %d", ++i, getRandomDiceValue()));
+            print(String.format("Dice %d has a value of %d", ++i, getRandomDiceValue(numberOfDiceSides)));
         }
     }
 
-    private static int getRandomDiceValue() {
-        return RANDOM.nextInt(6) + 1;
+    private static int getRandomDiceValue(int numberOfDiceSides) {
+        return RANDOM.nextInt(numberOfDiceSides) + 1;
     }
 
 }
